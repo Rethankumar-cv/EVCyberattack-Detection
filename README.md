@@ -1,4 +1,4 @@
-﻿# ≡ƒ¢í∩╕Å EV Cyber Detection ΓÇö Vehicle Cyberattack Detection System
+# 🛡️ EV Cyber Detection — Vehicle Cyberattack Detection System
 
 A full-stack, real-time automotive cybersecurity platform that monitors CAN bus traffic, detects cyberattacks using machine learning, and visualizes threats on a live SOC-style dashboard.
 
@@ -10,29 +10,29 @@ A full-stack, real-time automotive cybersecurity platform that monitors CAN bus 
 
 ---
 
-## ≡ƒôû Table of Contents
+## 📖 Table of Contents
 
 - [Overview](#-overview)
-- [System Architecture](#∩╕Å-system-architecture)
-- [Tech Stack](#∩╕Å-tech-stack)
+- [System Architecture](#️-system-architecture)
+- [Tech Stack](#️-tech-stack)
 - [Project Structure](#-project-structure)
 - [ML Pipeline](#-ml-pipeline)
 - [Backend API](#-backend-api)
-- [Frontend Dashboard](#∩╕Å-frontend-dashboard)
-- [Attack Types Detected](#∩╕Å-attack-types-detected)
+- [Frontend Dashboard](#️-frontend-dashboard)
+- [Attack Types Detected](#️-attack-types-detected)
 - [API Reference](#-api-reference)
-- [Getting Started](#∩╕Å-getting-started)
+- [Getting Started](#️-getting-started)
 - [Running the Full Stack](#-running-the-full-stack)
 - [Dashboard Features](#-dashboard-features)
 - [Incident Investigation](#-incident-investigation)
 - [Deployment](#-deployment)
-- [Dataset](#∩╕Å-dataset)
+- [Dataset](#️-dataset)
 - [Model Details](#-model-details)
 - [Troubleshooting](#-troubleshooting)
 
 ---
 
-## ≡ƒöì Overview
+## 🔍 Overview
 
 This project simulates a real-world **Automotive Security Operations Center (SOC)** targeting vehicle-level CAN bus intrusion detection. It combines:
 
@@ -40,110 +40,110 @@ This project simulates a real-world **Automotive Security Operations Center (SOC
 - **A FastAPI backend** that serves real-time predictions via REST API
 - **A React dashboard** that streams, visualizes, and investigates threats live
 
-The system classifies incoming CAN packets into threat levels ΓÇö **SAFE**, **WARNING**, or **CRITICAL** ΓÇö and identifies specific attack signatures like **DOS**, **FUZZING**, and **RPM\_SPOOF**.
+The system classifies incoming CAN packets into threat levels — **SAFE**, **WARNING**, or **CRITICAL** — and identifies specific attack signatures like **DOS**, **FUZZING**, and **RPM\_SPOOF**.
 
 ---
 
-## ≡ƒÅù∩╕Å System Architecture
+## 🏗️ System Architecture
 
 ```
-ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
-Γöé                   React Dashboard                       Γöé
-Γöé   ThreatMeter Γöé PacketStream Γöé AlertPanel Γöé ScoreChart  Γöé
-Γöé                  IncidentDrawer                         Γöé
-ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
-                         Γöé POST /predict (every 1s)
-                         Γöé Axios
-ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓû╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
-Γöé              FastAPI Backend (app.py)                   Γöé
-Γöé         CAN Packet ΓåÆ Scale ΓåÆ Predict ΓåÆ Score            Γöé
-ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
-             Γöé                          Γöé
-    ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓû╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ      ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓû╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
-    Γöé  KNN + RF        Γöé      Γöé   Isolation Forest   Γöé
-    Γöé  Classifiers     Γöé      Γöé   Anomaly Detection  Γöé
-    Γöé  (supervised)    Γöé      Γöé   (unsupervised)     Γöé
-    ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ      ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
-             Γöé                          Γöé
-    ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓû╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓû╝ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
-    Γöé         Trained on processed_can_data.csv     Γöé
-    ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+┌─────────────────────────────────────────────────────────┐
+│                   React Dashboard                       │
+│   ThreatMeter │ PacketStream │ AlertPanel │ ScoreChart  │
+│                  IncidentDrawer                         │
+└────────────────────────┬────────────────────────────────┘
+                         │ POST /predict (every 1s)
+                         │ Axios
+┌────────────────────────▼────────────────────────────────┐
+│              FastAPI Backend (app.py)                   │
+│         CAN Packet → Scale → Predict → Score            │
+└────────────┬──────────────────────────┬─────────────────┘
+             │                          │
+    ┌────────▼────────┐      ┌──────────▼──────────┐
+    │  KNN + RF        │      │   Isolation Forest   │
+    │  Classifiers     │      │   Anomaly Detection  │
+    │  (supervised)    │      │   (unsupervised)     │
+    └────────┬────────┘      └──────────┬──────────┘
+             │                          │
+    ┌────────▼──────────────────────────▼──────────┐
+    │         Trained on processed_can_data.csv     │
+    └───────────────────────────────────────────────┘
 ```
 
 **Threat Score Formula:**
 ```
-threat_score = (KNN_pred ├ù 0.4) + (RF_pred ├ù 0.4) + (anomaly_score ├ù 0.2)
+threat_score = (KNN_pred × 0.4) + (RF_pred × 0.4) + (anomaly_score × 0.2)
 ```
 
 | Threshold | Level |
 |-----------|-------|
-| `score > 0.6` | ≡ƒö┤ CRITICAL |
-| `score > 0.3` | ≡ƒƒí WARNING |
-| `score Γëñ 0.3` | ≡ƒƒó SAFE |
+| `score > 0.6` | 🔴 CRITICAL |
+| `score > 0.3` | 🟡 WARNING |
+| `score ≤ 0.3` | 🟢 SAFE |
 
 ---
 
-## ≡ƒ¢á∩╕Å Tech Stack
+## 🛠️ Tech Stack
 
 | Layer | Technology | Version |
 |-------|-----------|---------|
 | **Frontend** | React + Vite | React 19, Vite 7 |
 | **HTTP Client** | Axios | ^1.13 |
 | **Charts** | Recharts | ^3.7 |
-| **Styling** | Vanilla CSS ΓÇö dark SOC theme | ΓÇö |
-| **Fonts** | Share Tech Mono, Rajdhani (Google Fonts) | ΓÇö |
+| **Styling** | Vanilla CSS — dark SOC theme | — |
+| **Fonts** | Share Tech Mono, Rajdhani (Google Fonts) | — |
 | **Backend** | FastAPI + Uvicorn | 0.129 / 0.41 |
 | **Validation** | Pydantic | ^2.12 |
 | **ML Models** | scikit-learn | ^1.8 |
 | **Data** | Pandas, NumPy | 3.0, 2.4 |
 | **Serialization** | joblib | ^1.5 |
-| **Language** | Python 3.10+ / JavaScript ES2022 | ΓÇö |
+| **Language** | Python 3.10+ / JavaScript ES2022 | — |
 
 ---
 
-## ≡ƒôü Project Structure
+## 📁 Project Structure
 
 ```
 ev-cyber-detection/
-Γöé
-Γö£ΓöÇΓöÇ backend/
-Γöé   Γö£ΓöÇΓöÇ app.py              # FastAPI server ΓÇö /predict, /health endpoints
-Γöé   Γö£ΓöÇΓöÇ predict.py          # Standalone prediction module (for testing)
-Γöé   Γö£ΓöÇΓöÇ simulator.py        # CAN packet traffic simulator
-Γöé   Γö£ΓöÇΓöÇ requirements.txt    # Backend-only Python dependencies
-Γöé   ΓööΓöÇΓöÇ .env.example        # Environment variable template
-Γöé
-Γö£ΓöÇΓöÇ ml-pipeline/
-Γöé   Γö£ΓöÇΓöÇ train.py            # Model training (KNN + RF + Isolation Forest)
-Γöé   Γö£ΓöÇΓöÇ preprocess.py       # Data cleaning & feature engineering (uses AWS S3)
-Γöé   Γö£ΓöÇΓöÇ knn_model.pkl       # Trained K-Nearest Neighbors (~300 MB)
-Γöé   Γö£ΓöÇΓöÇ rf_model.pkl        # Trained Random Forest (~2 MB)
-Γöé   Γö£ΓöÇΓöÇ iso_model.pkl       # Trained Isolation Forest (~1.2 MB)
-Γöé   ΓööΓöÇΓöÇ scaler.pkl          # StandardScaler for KNN input normalization
-Γöé
-Γö£ΓöÇΓöÇ vehicle-cyber-dashboard/     # React frontend (Vite)
-Γöé   Γö£ΓöÇΓöÇ .env.example             # Frontend env variable template
-Γöé   ΓööΓöÇΓöÇ src/
-Γöé       Γö£ΓöÇΓöÇ api.js               # Axios connector ΓÇö reads VITE_API_URL env var
-Γöé       Γö£ΓöÇΓöÇ App.jsx              # Root ΓÇö polling loop, state, simulation fallback
-Γöé       Γö£ΓöÇΓöÇ index.css            # Dark SOC theme (CSS custom properties)
-Γöé       Γö£ΓöÇΓöÇ App.css              # Layout styles
-Γöé       ΓööΓöÇΓöÇ components/
-Γöé           Γö£ΓöÇΓöÇ ThreatMeter.jsx      # SVG arc gauge with animated needle
-Γöé           Γö£ΓöÇΓöÇ PacketStream.jsx     # Live scrollable CAN packet log (last 50)
-Γöé           Γö£ΓöÇΓöÇ AlertPanel.jsx       # CRITICAL-only alert list (clickable)
-Γöé           Γö£ΓöÇΓöÇ ScoreChart.jsx       # Recharts line chart ΓÇö last 20 threat scores
-Γöé           ΓööΓöÇΓöÇ IncidentDrawer.jsx   # Slide-in investigation panel
-Γöé
-Γö£ΓöÇΓöÇ requirements.txt         # Full Python dependency list (root)
-Γö£ΓöÇΓöÇ render.yaml              # Render.com deploy configuration
-Γö£ΓöÇΓöÇ .gitignore
-ΓööΓöÇΓöÇ README.md
+│
+├── backend/
+│   ├── app.py              # FastAPI server — /predict, /health endpoints
+│   ├── predict.py          # Standalone prediction module (for testing)
+│   ├── simulator.py        # CAN packet traffic simulator
+│   ├── requirements.txt    # Backend-only Python dependencies
+│   └── .env.example        # Environment variable template
+│
+├── ml-pipeline/
+│   ├── train.py            # Model training (KNN + RF + Isolation Forest)
+│   ├── preprocess.py       # Data cleaning & feature engineering (uses AWS S3)
+│   ├── knn_model.pkl       # Trained K-Nearest Neighbors (~300 MB)
+│   ├── rf_model.pkl        # Trained Random Forest (~2 MB)
+│   ├── iso_model.pkl       # Trained Isolation Forest (~1.2 MB)
+│   └── scaler.pkl          # StandardScaler for KNN input normalization
+│
+├── vehicle-cyber-dashboard/     # React frontend (Vite)
+│   ├── .env.example             # Frontend env variable template
+│   └── src/
+│       ├── api.js               # Axios connector — reads VITE_API_URL env var
+│       ├── App.jsx              # Root — polling loop, state, simulation fallback
+│       ├── index.css            # Dark SOC theme (CSS custom properties)
+│       ├── App.css              # Layout styles
+│       └── components/
+│           ├── ThreatMeter.jsx      # SVG arc gauge with animated needle
+│           ├── PacketStream.jsx     # Live scrollable CAN packet log (last 50)
+│           ├── AlertPanel.jsx       # CRITICAL-only alert list (clickable)
+│           ├── ScoreChart.jsx       # Recharts line chart — last 20 threat scores
+│           └── IncidentDrawer.jsx   # Slide-in investigation panel
+│
+├── requirements.txt         # Full Python dependency list (root)
+├── render.yaml              # Render.com deploy configuration
+├── .gitignore
+└── README.md
 ```
 
 ---
 
-## ≡ƒñû ML Pipeline
+## 🤖 ML Pipeline
 
 ### 1. Data Preprocessing (`ml-pipeline/preprocess.py`)
 
@@ -181,18 +181,18 @@ All models saved to `ml-pipeline/*.pkl` via `joblib`.
 ### 3. Threat Scoring (`backend/app.py`)
 
 ```python
-# Weighted ensemble score (0.0 ΓÇô 1.0)
+# Weighted ensemble score (0.0 – 1.0)
 threat_score = (knn_pred * 0.4) + (rf_pred * 0.4) + (anomaly_score * 0.2)
 
 # Threshold classification
-CRITICAL  ΓåÆ threat_score > 0.6
-WARNING   ΓåÆ threat_score > 0.3
-SAFE      ΓåÆ threat_score Γëñ 0.3
+CRITICAL  → threat_score > 0.6
+WARNING   → threat_score > 0.3
+SAFE      → threat_score ≤ 0.3
 ```
 
 ---
 
-## ≡ƒÜÇ Backend API
+## 🚀 Backend API
 
 **File:** `backend/app.py`  
 **Framework:** FastAPI + Uvicorn  
@@ -202,7 +202,7 @@ SAFE      ΓåÆ threat_score Γëñ 0.3
 
 | Method | Path | Description |
 |--------|------|-------------|
-| `GET` | `/` | Health check ΓÇö returns service status |
+| `GET` | `/` | Health check — returns service status |
 | `GET` | `/health` | Render health probe endpoint |
 | `POST` | `/predict` | CAN packet classification |
 | `GET` | `/docs` | Auto-generated Swagger UI |
@@ -212,16 +212,16 @@ SAFE      ΓåÆ threat_score Γëñ 0.3
 
 ---
 
-## ≡ƒûÑ∩╕Å Frontend Dashboard
+## 🖥️ Frontend Dashboard
 
-### `src/App.jsx` ΓÇö Core Logic
+### `src/App.jsx` — Core Logic
 
 - Generates a random CAN packet every **1 second**
 - Sends it to `POST /predict` via Axios
 - Distributes the result to all panels via React state
 - **Offline simulation mode:** If backend is unreachable, auto-generates realistic threat distributions so the UI stays live
 
-### `src/api.js` ΓÇö API Connector
+### `src/api.js` — API Connector
 
 Reads the backend URL from the `VITE_API_URL` environment variable:
 
@@ -229,7 +229,7 @@ Reads the backend URL from the `VITE_API_URL` environment variable:
 // .env (local development)
 VITE_API_URL=http://127.0.0.1:8000
 
-// .env (production ΓÇö set in Vercel dashboard)
+// .env (production — set in Vercel dashboard)
 VITE_API_URL=https://ev-cyber-backend.onrender.com
 ```
 
@@ -237,7 +237,7 @@ Returns `null` on network failure, which triggers simulation mode in `App.jsx`.
 
 ---
 
-## ΓÜá∩╕Å Attack Types Detected
+## ⚠️ Attack Types Detected
 
 | Attack | Trigger Condition | Description |
 |--------|------------------|-------------|
@@ -249,7 +249,7 @@ Returns `null` on network failure, which triggers simulation mode in `App.jsx`.
 
 ---
 
-## ≡ƒôí API Reference
+## 📡 API Reference
 
 ### `POST /predict`
 
@@ -286,9 +286,9 @@ Returns `null` on network failure, which triggers simulation mode in `App.jsx`.
 | `knn_prediction` | int | 0 / 1 | KNN binary prediction |
 | `rf_prediction` | int | 0 / 1 | Random Forest binary prediction |
 | `anomaly_flag` | int | 0 / 1 | 1 = anomaly (Isolation Forest) |
-| `threat_score` | float | 0.0ΓÇô1.0 | Weighted ensemble threat score |
-| `threat_level` | string | ΓÇö | `SAFE` / `WARNING` / `CRITICAL` |
-| `attack_type` | string | ΓÇö | `NORMAL` / `FUZZING` / `DOS` / `RPM_SPOOF` / `UNKNOWN_ATTACK` |
+| `threat_score` | float | 0.0–1.0 | Weighted ensemble threat score |
+| `threat_level` | string | — | `SAFE` / `WARNING` / `CRITICAL` |
+| `attack_type` | string | — | `NORMAL` / `FUZZING` / `DOS` / `RPM_SPOOF` / `UNKNOWN_ATTACK` |
 
 ### `GET /health`
 
@@ -304,7 +304,7 @@ Returns `null` on network failure, which triggers simulation mode in `App.jsx`.
 
 ---
 
-## ΓÜÖ∩╕Å Getting Started
+## ⚙️ Getting Started
 
 ### Prerequisites
 
@@ -317,7 +317,7 @@ Returns `null` on network failure, which triggers simulation mode in `App.jsx`.
 
 ---
 
-### Step 1 ΓÇö Clone the Repository
+### Step 1 — Clone the Repository
 
 ```bash
 git clone https://github.com/Rethankumar-cv/EVCyberattack-Detection.git
@@ -326,16 +326,16 @@ cd EVCyberattack-Detection
 
 ---
 
-### Step 2 ΓÇö Python Virtual Environment & Dependencies
+### Step 2 — Python Virtual Environment & Dependencies
 
 ```bash
 # Create virtual environment
 python -m venv venv
 
-# Activate ΓÇö Windows (PowerShell)
+# Activate — Windows (PowerShell)
 venv\Scripts\activate
 
-# Activate ΓÇö macOS / Linux
+# Activate — macOS / Linux
 source venv/bin/activate
 
 # Install all Python dependencies
@@ -344,7 +344,7 @@ pip install -r requirements.txt
 
 ---
 
-### Step 3 ΓÇö Frontend Dependencies
+### Step 3 — Frontend Dependencies
 
 ```bash
 cd vehicle-cyber-dashboard
@@ -354,7 +354,7 @@ cd ..
 
 ---
 
-### Step 4 ΓÇö Environment Variables (Optional)
+### Step 4 — Environment Variables (Optional)
 
 Copy the env templates:
 
@@ -370,7 +370,7 @@ Edit as needed. For local development the defaults work without any changes.
 
 ---
 
-### Step 5 ΓÇö (Optional) Retrain Models
+### Step 5 — (Optional) Retrain Models
 
 > Skip this if `.pkl` files already exist in `ml-pipeline/`. They are pre-trained and ready.
 
@@ -378,24 +378,24 @@ Edit as needed. For local development the defaults work without any changes.
 # Requires AWS credentials in backend/.env for S3 download
 python ml-pipeline/preprocess.py
 
-# Then train all three models (~5ΓÇô20 min depending on hardware)
+# Then train all three models (~5–20 min depending on hardware)
 python ml-pipeline/train.py
 ```
 
 ---
 
-## ≡ƒÅâ Running the Full Stack
+## 🏃 Running the Full Stack
 
-> Run **two terminals** side by side ΓÇö one for backend, one for frontend.
+> Run **two terminals** side by side — one for backend, one for frontend.
 
 ---
 
-### Terminal 1 ΓÇö Start the Backend (FastAPI)
+### Terminal 1 — Start the Backend (FastAPI)
 
 ```bash
 # From the project root: ev-cyber-detection/
 
-# Windows (PowerShell) ΓÇö PYTHONUTF8=1 prevents encoding errors
+# Windows (PowerShell) — PYTHONUTF8=1 prevents encoding errors
 $env:PYTHONUTF8="1"; venv\Scripts\python.exe -m uvicorn backend.app:app --host 127.0.0.1 --port 8000
 
 # macOS / Linux
@@ -417,11 +417,11 @@ INFO:     Uvicorn running on http://127.0.0.1:8000
 | http://127.0.0.1:8000/docs | Swagger UI |
 | http://127.0.0.1:8000/health | Health check |
 
-> ΓÜá∩╕Å **Windows Note:** Do NOT use `--reload` flag ΓÇö it causes a Unicode encoding crash via multiprocessing on Windows. Use the command above without `--reload`.
+> ⚠️ **Windows Note:** Do NOT use `--reload` flag — it causes a Unicode encoding crash via multiprocessing on Windows. Use the command above without `--reload`.
 
 ---
 
-### Terminal 2 ΓÇö Start the Frontend (React/Vite)
+### Terminal 2 — Start the Frontend (React/Vite)
 
 ```bash
 cd vehicle-cyber-dashboard
@@ -432,17 +432,17 @@ npm run dev
 ```
   VITE v7.x.x  ready in 500 ms
 
-  Γ₧£  Local:   http://localhost:5173/
-  Γ₧£  Network: use --host to expose
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
 ```
 
 Dashboard live at: **http://localhost:5173**
 
-> **Tip:** The dashboard works **without the backend** ΓÇö it enters simulation mode automatically and generates random threats so you can explore the UI offline.
+> **Tip:** The dashboard works **without the backend** — it enters simulation mode automatically and generates random threats so you can explore the UI offline.
 
 ---
 
-### Optional ΓÇö Run the Packet Simulator
+### Optional — Run the Packet Simulator
 
 To flood the backend with mixed normal/attack traffic for testing:
 
@@ -453,69 +453,69 @@ python backend/simulator.py
 
 ---
 
-## ≡ƒôè Dashboard Features
+## 📊 Dashboard Features
 
 | Panel | Description |
 |-------|-------------|
-| ΓÜí **Threat Meter** | SVG arc gauge with animated needle ΓÇö SAFE / WARNING / CRITICAL zones |
-| ≡ƒôí **Live Packet Stream** | Scrollable log of last 50 CAN packets with hex bytes, CAN ID, DLC, and threat badge |
-| ≡ƒÜ¿ **Critical Alerts** | CRITICAL-only filtered list ΓÇö click any card to open investigation panel |
-| ≡ƒôê **Threat Score Chart** | Recharts line graph of the last 20 threat scores over time |
+| ⚡ **Threat Meter** | SVG arc gauge with animated needle — SAFE / WARNING / CRITICAL zones |
+| 📡 **Live Packet Stream** | Scrollable log of last 50 CAN packets with hex bytes, CAN ID, DLC, and threat badge |
+| 🚨 **Critical Alerts** | CRITICAL-only filtered list — click any card to open investigation panel |
+| 📈 **Threat Score Chart** | Recharts line graph of the last 20 threat scores over time |
 
 **Color scheme:**
 | Level | Color | Hex |
 |-------|-------|-----|
-| ≡ƒƒó SAFE | Green | `#00ff88` |
-| ≡ƒƒí WARNING | Amber | `#ffaa00` |
-| ≡ƒö┤ CRITICAL | Red | `#ff2244` |
+| 🟢 SAFE | Green | `#00ff88` |
+| 🟡 WARNING | Amber | `#ffaa00` |
+| 🔴 CRITICAL | Red | `#ff2244` |
 
 **Connection status indicator (top-right):**
 | Badge | Meaning |
 |-------|---------|
-| ≡ƒƒó `ONLINE` | Connected to FastAPI backend |
-| ≡ƒƒí `SIMULATION` | Backend offline ΓÇö using local simulation |
+| 🟢 `ONLINE` | Connected to FastAPI backend |
+| 🟡 `SIMULATION` | Backend offline — using local simulation |
 
 ---
 
-## ≡ƒöì Incident Investigation
+## 🔍 Incident Investigation
 
 Click any **CRITICAL** alert card to open the slide-in investigation panel:
 
 ```
-ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
-Γöé   Incident Investigation     Γöé
-ΓöéΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöé
-Γöé  [CRITICAL | FUZZING]        Γöé
-Γöé                              Γöé
-Γöé  Packet Details              Γöé
-Γöé  CAN ID    0x1A3 (419)       Γöé
-Γöé  DLC       8                 Γöé
-Γöé  Timestamp 8:42:31 PM        Γöé
-Γöé  Score     87.0%             Γöé
-Γöé  Anomaly   TRUE              Γöé
-Γöé                              Γöé
-Γöé  DATA [0ΓÇô7]                  Γöé
-Γöé  D8   00   00  ...  00       Γöé
-Γöé                              Γöé
-Γöé  Attack Description          Γöé
-Γöé  Random payload injection... Γöé
-Γöé                              Γöé
-Γöé  Recommended Response        Γöé
-Γöé  Inspect ECU message...      Γöé
-ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+┌──────────────────────────────┐
+│   Incident Investigation     │
+│──────────────────────────────│
+│  [CRITICAL | FUZZING]        │
+│                              │
+│  Packet Details              │
+│  CAN ID    0x1A3 (419)       │
+│  DLC       8                 │
+│  Timestamp 8:42:31 PM        │
+│  Score     87.0%             │
+│  Anomaly   TRUE              │
+│                              │
+│  DATA [0–7]                  │
+│  D8   00   00  ...  00       │
+│                              │
+│  Attack Description          │
+│  Random payload injection... │
+│                              │
+│  Recommended Response        │
+│  Inspect ECU message...      │
+└──────────────────────────────┘
 ```
 
 **Behaviour:**
-- Selected alert gets a full red highlight border + `Γû╢ INVESTIGATING` badge
+- Selected alert gets a full red highlight border + `▶ INVESTIGATING` badge
 - Clicking a different alert updates the panel live
-- Click the backdrop or `Γ£ò` button to dismiss
+- Click the backdrop or `✕` button to dismiss
 - Panel slides in from the right with smooth animation
 
 ---
 
-## ≡ƒîÉ Deployment
+## 🌐 Deployment
 
-### Frontend ΓåÆ Vercel
+### Frontend → Vercel
 
 1. Push code to GitHub
 2. Import `EVCyberattack-Detection` repo on [vercel.com](https://vercel.com)
@@ -523,7 +523,7 @@ Click any **CRITICAL** alert card to open the slide-in investigation panel:
 4. Add environment variable: `VITE_API_URL` = your Render backend URL
 5. Deploy
 
-### Backend ΓåÆ Render
+### Backend → Render
 
 1. Create a **Web Service** on [render.com](https://render.com)
 2. Set **Root Directory** = `backend`
@@ -538,7 +538,7 @@ Click any **CRITICAL** alert card to open the slide-in investigation panel:
 
 ---
 
-## ≡ƒùé∩╕Å Dataset
+## 🗂️ Dataset
 
 | File | Size | Description |
 |------|------|-------------|
@@ -553,19 +553,19 @@ Click any **CRITICAL** alert card to open the slide-in investigation panel:
 |--------|------|-------------|
 | `CAN ID` | int | CAN bus message identifier |
 | `DLC` | int | Data Length Code (bytes per frame) |
-| `DATA[0]`ΓÇô`DATA[7]` | int | 8 payload bytes per frame (hex ΓåÆ int) |
+| `DATA[0]`–`DATA[7]` | int | 8 payload bytes per frame (hex → int) |
 | `target` | int | Label: `0` = normal, `1` = attack |
 
 ---
 
-## ≡ƒºá Model Details
+## 🧠 Model Details
 
 | Model | File | Algorithm | Features | Size |
 |-------|------|-----------|----------|------|
 | KNN | `knn_model.pkl` | K-Nearest Neighbors (k=5) | Scaled | ~300 MB |
 | Random Forest | `rf_model.pkl` | Random Forest (100 trees) | Raw | ~2 MB |
 | Isolation Forest | `iso_model.pkl` | Isolation Forest (contamination=0.1) | Raw | ~1.2 MB |
-| Scaler | `scaler.pkl` | StandardScaler | ΓÇö | <1 KB |
+| Scaler | `scaler.pkl` | StandardScaler | — | <1 KB |
 
 **Ensemble voting weights:**
 | Model | Weight |
@@ -576,7 +576,7 @@ Click any **CRITICAL** alert card to open the slide-in investigation panel:
 
 ---
 
-## ≡ƒöº Troubleshooting
+## 🔧 Troubleshooting
 
 ### `ERR_CONNECTION_REFUSED` on frontend
 
@@ -601,20 +601,20 @@ taskkill /PID <PID> /F
 
 Ensure you are running uvicorn **from the project root** (`ev-cyber-detection/`), not from inside the `backend/` folder:
 ```bash
-# Correct ΓÇö run from root
+# Correct — run from root
 venv\Scripts\python.exe -m uvicorn backend.app:app ...
 
-# Incorrect ΓÇö do NOT cd into backend first
+# Incorrect — do NOT cd into backend first
 cd backend && uvicorn app:app ...
 ```
 
 ### Frontend shows `SIMULATION` badge (yellow)
 
-This means the backend is offline or unreachable. The dashboard still works ΓÇö it generates synthetic data. Start the backend to switch to live mode.
+This means the backend is offline or unreachable. The dashboard still works — it generates synthetic data. Start the backend to switch to live mode.
 
 ---
 
-## ≡ƒôä License
+## 📄 License
 
 This project is for educational and research purposes.
 
