@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -6,18 +7,40 @@ import pandas as pd
 import os
 
 # -------------------------------------------------
+# Environment Config
+# -------------------------------------------------
+
+# On Render, set MODEL_DIR env var to the path of your model files
+# Defaults to ../ml-pipeline relative to this file (local dev)
+MODEL_DIR = os.getenv(
+    "MODEL_DIR",
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "ml-pipeline")
+)
+
+# Frontend URL — set FRONTEND_URL env var on Render/Vercel
+FRONTEND_URL = os.getenv("FRONTEND_URL", "")
+
+# -------------------------------------------------
 # Initialize FastAPI
 # -------------------------------------------------
 
 app = FastAPI(title="Vehicle Cyberattack Detection API")
 
-# CORS for React dashboard
+# CORS for React dashboard (local + production)
+ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
+]
+
+# Inject production frontend URL from env (set this on Render)
+if FRONTEND_URL:
+    ALLOWED_ORIGINS.append(FRONTEND_URL)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5174",
-        "http://127.0.0.1:5174"
-    ],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -27,14 +50,26 @@ app.add_middleware(
 # Load Models
 # -------------------------------------------------
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+print(f"[INFO] Loading models from: {MODEL_DIR}")
 
-knn = joblib.load(os.path.join(BASE_DIR, "ml-pipeline", "knn_model.pkl"))
-rf = joblib.load(os.path.join(BASE_DIR, "ml-pipeline", "rf_model.pkl"))
-iso = joblib.load(os.path.join(BASE_DIR, "ml-pipeline", "iso_model.pkl"))
-scaler = joblib.load(os.path.join(BASE_DIR, "ml-pipeline", "scaler.pkl"))
+knn = joblib.load(os.path.join(MODEL_DIR, "knn_model.pkl"))
+rf = joblib.load(os.path.join(MODEL_DIR, "rf_model.pkl"))
+iso = joblib.load(os.path.join(MODEL_DIR, "iso_model.pkl"))
+scaler = joblib.load(os.path.join(MODEL_DIR, "scaler.pkl"))
 
-print("✅ Models loaded successfully.")
+print("[INFO] Models loaded successfully.")
+
+# -------------------------------------------------
+# Health Check (required by Render)
+# -------------------------------------------------
+
+@app.get("/")
+def root():
+    return {"status": "ok", "service": "Vehicle Cyberattack Detection API"}
+
+@app.get("/health")
+def health():
+    return {"status": "healthy"}
 
 # -------------------------------------------------
 # Request Schema
